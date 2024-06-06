@@ -70,6 +70,31 @@ $color-white:#F1F1F1F1;
                         border: 1px solid $color-dark;
                     }
                 }
+                .rolesContainer{
+                    margin-top: -1rem;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                    .parentRole{
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        .parentRole__checkbox{
+                            margin-bottom: 5px;
+                        }
+                    }
+                    .childRoles{
+                        display: flex;
+                        flex-direction: column;
+                        // gap: 3px;
+                        padding-left: 15px;
+                        .childRole{
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                        }
+                    }
+                }
             }
             .btn-group{
                 display: flex;

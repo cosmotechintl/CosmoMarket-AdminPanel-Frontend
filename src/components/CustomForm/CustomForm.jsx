@@ -1,13 +1,65 @@
-import React from 'react';
+import React, { useState } from 'react';
 import "./CustomForm.scss";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
 
-const CustomForm = ({ header = "Default Header", fields = [],flexDirection="column" }) => {
+const roles = {
+  group1: {
+    Vendor: ['create vendor', 'update vendor', 'view vendor'],
+    Customer: ['create customer', 'view customer', 'block customer']
+  },
+  group2: {
+    Supplier: ['create supplier', 'update supplier', 'view supplier'],
+    Client: ['create client', 'view client', 'block client']
+  },
+  group3: {
+    Admin: ['create admin', 'update admin', 'view admin'],
+    User: ['create user', 'view user', 'block user']
+  }
+};
+
+const CustomForm = ({ header = "Default Header", fields = [], flexDirection="column" }) => {
   const navigate = useNavigate();
   const handleBackClick = () => {
     navigate(-1);
   };
+
+  const [selectedGroup, setSelectedGroup] = useState('');
+  const [selectedRoles, setSelectedRoles] = useState({});
+
+  const handleSelectChange = (e) => {
+    const group = e.target.value;
+    setSelectedGroup(group);
+    setSelectedRoles({});
+  };
+
+  const handleParentRoleChange = (role) => {
+    const updatedRoles = { ...selectedRoles };
+    if (updatedRoles[role]) {
+      delete updatedRoles[role];
+    } else {
+      updatedRoles[role] = roles[selectedGroup][role];
+    }
+    setSelectedRoles(updatedRoles);
+  };
+
+  const handleChildRoleChange = (parent, child) => {
+    const updatedRoles = { ...selectedRoles };
+    if (updatedRoles[parent]?.includes(child)) {
+      updatedRoles[parent] = updatedRoles[parent].filter(r => r !== child);
+      if (updatedRoles[parent].length === 0) {
+        delete updatedRoles[parent];
+      }
+    } else {
+      updatedRoles[parent] = [...(updatedRoles[parent] || []), child];
+    }
+    setSelectedRoles(updatedRoles);
+  };
+
+  const isChecked = (parent, child) => {
+    return selectedRoles[parent]?.includes(child);
+  };
+
   return (
     <div className="createPageContainer">
       <div className="createPageContents">
@@ -15,13 +67,14 @@ const CustomForm = ({ header = "Default Header", fields = [],flexDirection="colu
           <span className="backIcon" onClick={handleBackClick}><FaArrowLeftLong /></span>
           <span className="headerTitle">{header}</span>
         </div>
-        <div className="bottom" >
-          <form style={{ flexDirection: flexDirection }}>
+        <div className="bottom">
+          <form style={{ flexDirection:flexDirection }}>
             {fields.map((field, index) => (
               <div className="inputGroup" key={index}>
                 <label htmlFor={field.name}>{field.name}</label>
                 {field.type === 'select' ? (
-                  <select name={field.name} id={field.name}>
+                  <select name={field.name} id={field.name} onChange={handleSelectChange}>
+                    <option value="">Select an option</option>
                     {field.options.map((option, index) => (
                       <option value={option.value} key={index}>{option.label}</option>
                     ))}
@@ -33,6 +86,36 @@ const CustomForm = ({ header = "Default Header", fields = [],flexDirection="colu
                 )}
               </div>
             ))}
+            {selectedGroup && roles[selectedGroup] && (
+              <div className="rolesContainer">
+                {Object.keys(roles[selectedGroup]).map((parentRole) => (
+                  <div key={parentRole} className="roleGroup">
+                    <div className="parentRole">
+                      <input className="parentRole__checkbox"
+                        type="checkbox"
+                        id={parentRole}
+                        checked={selectedRoles[parentRole]?.length === roles[selectedGroup][parentRole].length}
+                        onChange={() => handleParentRoleChange(parentRole)}
+                      />
+                      <label htmlFor={parentRole}>{parentRole}</label>
+                    </div>
+                    <div className="childRoles">
+                      {roles[selectedGroup][parentRole].map((childRole) => (
+                        <div key={childRole} className="childRole">
+                          <input
+                            type="checkbox"
+                            id={childRole}
+                            checked={isChecked(parentRole, childRole)}
+                            onChange={() => handleChildRoleChange(parentRole, childRole)}
+                          />
+                          <label htmlFor={childRole}>{childRole}</label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </form>
           <div className="btn-group">
             <button type="submit" className='create-btn'>Create</button>
@@ -41,7 +124,7 @@ const CustomForm = ({ header = "Default Header", fields = [],flexDirection="colu
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default CustomForm;
