@@ -17,7 +17,7 @@ const CreateAccessGroup = () => {
 
   return (
     <div>
-      <CustomForm header="Create Access Group" fields={fields} flexDirection='column' />
+      <CustomForm header="Create Access Group" fields={fields} flexDirection='column' useCheckboxesForRoles={true}  />
     </div>
   );
 }

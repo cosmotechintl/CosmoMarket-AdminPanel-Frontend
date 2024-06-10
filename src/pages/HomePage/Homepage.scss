@@ -37,6 +37,10 @@ $primary-color: #00425A;
                 flex: 13;
                 overflow-y: auto;
                 height:calc(100vh - 40px - 3rem);
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+                scrollbar-width: none; 
                 .cardArea{
                     display: flex;
                     align-items: center;

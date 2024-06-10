@@ -1,6 +1,7 @@
 import React from 'react'
 import "./Sidebar.scss"
 import { IoHomeOutline,IoBusinessOutline,IoPersonOutline,IoSettingsOutline  } from "react-icons/io5";
+import { MdDesignServices } from "react-icons/md";
 import { GrUserAdmin } from "react-icons/gr";
 import { TbReportSearch } from "react-icons/tb";
 import { PiSignOut } from "react-icons/pi";
@@ -9,6 +10,19 @@ import { performLogout } from '../../auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import useFetch from '../../hooks/useFetch'
+import { BASE_URL } from '../../utils/config';
+import { adminRequest, updateAuthToken } from '../../utils/requestMethods';
+const iconMapping = {
+  IoHomeOutline,
+  IoBusinessOutline,
+  IoPersonOutline,
+  IoSettingsOutline,
+  MdDesignServices,
+  TbReportSearch,
+  GrUserAdmin,
+  PiSignOut
+};
 const Sidebar = () => {
   const navigate=useNavigate();
   const location = useLocation();
@@ -19,48 +33,27 @@ const Sidebar = () => {
       navigate("/");
     });
   }
+  updateAuthToken();
+  const{ data,loading,error } = useFetch(`${BASE_URL}/navigation`, adminRequest);
+  if (loading) return <div>Loading...</div>;
+  if (!data || !data.data) return <div>No data available</div>;
+  const sortedData = data.data.sort((a, b) => a.position - b.position);
   return (
     <div className="sidebarContainer">
       <div className="sidebarContents">
         <div className="sidebarMenuContainer">
-          <Link to="/admin/dashboard" style={{ textDecoration:"none" }}>
-            <SidebarMenu 
-              icon={<IoHomeOutline/>} 
-              title="Dashboard"
-              isActive={!activeURL || activeURL === "dashboard" || activeURL === "profile"}
-            />
-          </Link>
-          <Link to="/admin/users" style={{ textDecoration:"none" }}>
-            <SidebarMenu 
-              icon={<GrUserAdmin/>} 
-              title="Admin" 
-              isActive={activeURL === "users"}
-            />
-          </Link>
-          <Link to="/admin/vendors" style={{ textDecoration:"none" }}>
-            <SidebarMenu 
-              icon={<IoBusinessOutline/>} 
-              title="Vendors" 
-              isActive={activeURL === "vendors"}
-            />
-          </Link>
-          <SidebarMenu 
-            icon={<IoPersonOutline/>} 
-            title="Customers" 
-            isActive={activeURL === "customers"}
-          />
-          <SidebarMenu
-            icon={<TbReportSearch/>}
-            title="Reports"
-            isActive={activeURL === "reports"}
-          />
-          <Link to="/admin/settings" style={{ textDecoration:"none" }}>
-            <SidebarMenu
-              icon={<IoSettingsOutline/>}
-              title="Settings"
-              isActive={activeURL === "settings"}
-            />
-          </Link>  
+          {sortedData.map((item, index) => {
+              const IconComponent = iconMapping[item.icon];
+              return (
+                <Link to={`/admin${item.navigation}`} style={{ textDecoration: "none" }} key={index}>
+                  <SidebarMenu 
+                    icon={IconComponent ? <IconComponent /> : null}
+                    title={item.name}
+                    // isActive={!activeURL || activeURL === "reports" || activeURL === "profile"}
+                  />
+                </Link>
+              );
+            })}
           <SidebarMenu
             icon={<PiSignOut/>}
             title="Sign Out"

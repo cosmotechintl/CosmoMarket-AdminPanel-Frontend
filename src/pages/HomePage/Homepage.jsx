@@ -4,7 +4,6 @@ import UserProfile from "../../components/Userprofile/UserProfile";
 import Sidebar from '../../components/Sidebar/Sidebar';
 import Navbar from '../../components/Navbar/Navbar';
 import "./Homepage.scss";
-import { getAuthorities } from '../../auth';
 import SettingPage from '../SettingPage/SettingPage';
 import AccessGroupPage from '../AccessGroup/AccessGroupList/AccessGroupList';
 import CreateAccessGroup from '../AccessGroup/CreateAccessGroup/CreateAccessGroup';
@@ -12,8 +11,9 @@ import AdminList from '../Admin/AdminList/AdminList';
 import CreateAdmin from '../Admin/CreateAdmin/CreateAdmin';
 import VendorList from '../Vendor/VendorList/VendorList';
 import CreateVendor from '../Vendor/CreateVendor/CreateVendor';
+import CustomerList from '../Customer/CustomerList/CustomerList';
+import ReportPage from '../ReportPage/ReportPage';
 const Homepage = () => {
-  console.log(getAuthorities());
   return (
     <div className="homepageContainer">
         <div className="homepageContents">
@@ -31,13 +31,15 @@ const Homepage = () => {
             <div className="homepageContents__right">
               <Routes>
                 <Route path="profile" element={<UserProfile />}/>
-                <Route path="users" element={<AdminList />}/>
-                <Route path="users/create" element={<CreateAdmin />}/>
-                <Route path="vendors" element={<VendorList/>} />
+                <Route path="adminUser" element={<AdminList />}/>
+                <Route path="adminUser/create" element={<CreateAdmin />}/>
+                <Route path="vendor" element={<VendorList/>} />
                 <Route path="vendors/create" element={<CreateVendor/>} />
-                <Route path="settings" element={<SettingPage />}/>
-                <Route path="settings/group" element={<AccessGroupPage />}/>
-                <Route path="settings/group/create" element={<CreateAccessGroup />}/>
+                <Route path="customer" element={<CustomerList/>}/>
+                <Route path="reports" element={<ReportPage/>}/>
+                <Route path="setting" element={<SettingPage />}/>
+                <Route path="setting/group" element={<AccessGroupPage />}/>
+                <Route path="setting/group/create" element={<CreateAccessGroup />}/>
               </Routes>
             </div>
           </div>
