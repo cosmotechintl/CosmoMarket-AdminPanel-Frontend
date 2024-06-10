@@ -7,6 +7,7 @@ $color-icon:#2384b4;
 $border-color:rgba(128, 128, 128, 0.378);
 $color-white:#F1F1F1F1;
 .createPageContainer{
+    font-family: 'poppins',sans-serif;
     .createPageContents{
         .top{
             display: inline-flex;
@@ -74,11 +75,18 @@ $color-white:#F1F1F1F1;
                     margin-top: -1rem;
                     display: flex;
                     flex-direction: column;
-                    gap: 5px;
+                    font-size: 14px;
+                    gap: 3px;
                     .parentRole{
                         display: flex;
                         flex-direction: row;
                         align-items: center;
+                        .iconDrop{
+                            font-size: 20px;
+                            &:hover{
+                                cursor: pointer;
+                            }
+                        }
                         .parentRole__checkbox{
                             margin-bottom: 5px;
                         }
@@ -87,7 +95,7 @@ $color-white:#F1F1F1F1;
                         display: flex;
                         flex-direction: column;
                         // gap: 3px;
-                        padding-left: 15px;
+                        padding-left: 30px;
                         .childRole{
                             display: flex;
                             flex-direction: row;

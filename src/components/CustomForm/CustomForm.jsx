@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./CustomForm.scss";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
-
+import { IoMdArrowDropright, IoMdArrowDropdown  } from "react-icons/io";
 const roles = {
   group1: {
     Vendor: ['create vendor', 'update vendor', 'view vendor'],
-    Customer: ['create customer', 'view customer', 'block customer']
+    Customer: ['create customer', 'view customer', 'block customer'],
+    Supplier: ['create supplier', 'update supplier', 'view supplier'],
+    Client: ['create client', 'view client', 'block client'],
+    Admin: ['create admin', 'update admin', 'view admin'],
+    User: ['create user', 'view user', 'block user']
   },
   group2: {
     Supplier: ['create supplier', 'update supplier', 'view supplier'],
@@ -26,11 +30,23 @@ const CustomForm = ({ header = "Default Header", fields = [], flexDirection="col
 
   const [selectedGroup, setSelectedGroup] = useState('');
   const [selectedRoles, setSelectedRoles] = useState({});
+  const [expandedRoles, setExpandedRoles] = useState({});
+
+  useEffect(() => {
+    if (selectedGroup) {
+      const initialExpandedRoles = Object.keys(roles[selectedGroup]).reduce((acc, role) => {
+        acc[role] = true;
+        return acc;
+      }, {});
+      setExpandedRoles(initialExpandedRoles);
+    }
+  }, [selectedGroup]);
 
   const handleSelectChange = (e) => {
     const group = e.target.value;
     setSelectedGroup(group);
     setSelectedRoles({});
+    setExpandedRoles({});
   };
 
   const handleParentRoleChange = (role) => {
@@ -58,6 +74,13 @@ const CustomForm = ({ header = "Default Header", fields = [], flexDirection="col
 
   const isChecked = (parent, child) => {
     return selectedRoles[parent]?.includes(child);
+  };
+
+  const toggleExpand = (parentRole) => {
+    setExpandedRoles((prevState) => ({
+      ...prevState,
+      [parentRole]: !prevState[parentRole],
+    }));
   };
 
   return (
@@ -91,6 +114,11 @@ const CustomForm = ({ header = "Default Header", fields = [], flexDirection="col
                 {Object.keys(roles[selectedGroup]).map((parentRole) => (
                   <div key={parentRole} className="roleGroup">
                     <div className="parentRole">
+                      {expandedRoles[parentRole] ? (
+                        <IoMdArrowDropdown className="iconDrop" onClick={() => toggleExpand(parentRole)} />
+                      ) : (
+                        <IoMdArrowDropright className="iconDrop" onClick={() => toggleExpand(parentRole)} />
+                      )}
                       <input className="parentRole__checkbox"
                         type="checkbox"
                         id={parentRole}
@@ -99,19 +127,21 @@ const CustomForm = ({ header = "Default Header", fields = [], flexDirection="col
                       />
                       <label htmlFor={parentRole}>{parentRole}</label>
                     </div>
-                    <div className="childRoles">
-                      {roles[selectedGroup][parentRole].map((childRole) => (
-                        <div key={childRole} className="childRole">
-                          <input
-                            type="checkbox"
-                            id={childRole}
-                            checked={isChecked(parentRole, childRole)}
-                            onChange={() => handleChildRoleChange(parentRole, childRole)}
-                          />
-                          <label htmlFor={childRole}>{childRole}</label>
-                        </div>
-                      ))}
-                    </div>
+                    {expandedRoles[parentRole] && (
+                      <div className="childRoles">
+                        {roles[selectedGroup][parentRole].map((childRole) => (
+                          <div key={childRole} className="childRole">
+                            <input
+                              type="checkbox"
+                              id={childRole}
+                              checked={isChecked(parentRole, childRole)}
+                              onChange={() => handleChildRoleChange(parentRole, childRole)}
+                            />
+                            <label htmlFor={childRole}>{childRole}</label>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

@@ -1,3 +1,4 @@
+import { updateAuthToken } from "../utils/requestMethods";
 //check user
 export const isLoggedIn = () => {
   let data = sessionStorage.getItem("authToken");
@@ -19,11 +20,13 @@ export const isLoggedIn = () => {
 //do login
 export const performLogin = (response, next) => {
   sessionStorage.setItem("authToken", JSON.stringify(response.data.token));
+  updateAuthToken();
   next();
 };
 //do logout
 export const performLogout = (next) => {
   sessionStorage.removeItem("authToken");
+  updateAuthToken();
   next();
 };
 //get username
