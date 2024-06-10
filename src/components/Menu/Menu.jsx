@@ -16,10 +16,12 @@ const Menu = () => {
                 <span className="icon"><PiAddressBookLight/></span>
                 <span className="title">Activity Log</span>
             </div>
-            <div className="menuItem">
-                <span className="icon"><IoLockClosedOutline/></span>
-                <span className="title">Change Password</span>
-            </div>
+            <Link to="/admin/changePassword" className="menuItem">
+                <div className="menuItem">
+                    <span className="icon"><IoLockClosedOutline/></span>
+                    <span className="title">Change Password</span>
+                </div>
+            </Link>
             <div className="menuItem">
                 <span className="icon"><PiSignOut/></span>
                 <span className="title">Sign Out</span>
