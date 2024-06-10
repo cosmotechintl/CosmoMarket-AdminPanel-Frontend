@@ -71,6 +71,38 @@ $color-white:#F1F1F1F1;
                         border: 1px solid $color-dark;
                     }
                 }
+                .rolesContainer{
+                    margin-top: -1rem;
+                    display: flex;
+                    flex-direction: column;
+                    font-size: 14px;
+                    gap: 3px;
+                    .parentRole{
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        .iconDrop{
+                            font-size: 20px;
+                            &:hover{
+                                cursor: pointer;
+                            }
+                        }
+                        .parentRole__checkbox{
+                            margin-bottom: 5px;
+                        }
+                    }
+                    .childRoles{
+                        display: flex;
+                        flex-direction: column;
+                        // gap: 3px;
+                        padding-left: 30px;
+                        .childRole{
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                        }
+                    }
+                }
             }
             .btn-group{
                 display: flex;

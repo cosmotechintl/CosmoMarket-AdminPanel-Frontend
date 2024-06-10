@@ -13,6 +13,7 @@ import VendorList from '../Vendor/VendorList/VendorList';
 import CreateVendor from '../Vendor/CreateVendor/CreateVendor';
 import CustomerList from '../Customer/CustomerList/CustomerList';
 import ReportPage from '../ReportPage/ReportPage';
+import ChangePassword from '../ChangePassword/ChangePassword';
 const Homepage = () => {
   return (
     <div className="homepageContainer">
@@ -31,10 +32,11 @@ const Homepage = () => {
             <div className="homepageContents__right">
               <Routes>
                 <Route path="profile" element={<UserProfile />}/>
+                <Route path="changePassword" element={<ChangePassword />}/>
                 <Route path="adminUser" element={<AdminList />}/>
                 <Route path="adminUser/create" element={<CreateAdmin />}/>
                 <Route path="vendor" element={<VendorList/>} />
-                <Route path="vendors/create" element={<CreateVendor/>} />
+                <Route path="vendor/create" element={<CreateVendor/>} />
                 <Route path="customer" element={<CustomerList/>}/>
                 <Route path="reports" element={<ReportPage/>}/>
                 <Route path="setting" element={<SettingPage />}/>
