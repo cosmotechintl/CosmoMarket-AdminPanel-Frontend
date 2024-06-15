@@ -14,10 +14,10 @@ $active-bg-color: #edf2f4d5;
         height:80vh;
         width: 100%;  
         gap: 20px;
-        .notFoundIcon{
+        .notFoundIconContainer{
             border-radius: 50%;
             background-color: $active-bg-color;
-            .loadingIcon{
+            .notFoundIcon{
                 padding: 5px;
                 height:80px;
                 width:80px;

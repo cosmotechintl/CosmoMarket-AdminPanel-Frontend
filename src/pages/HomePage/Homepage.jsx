@@ -14,6 +14,9 @@ import CreateVendor from '../Vendor/CreateVendor/CreateVendor';
 import CustomerList from '../Customer/CustomerList/CustomerList';
 import ReportPage from '../ReportPage/ReportPage';
 import ChangePassword from '../ChangePassword/ChangePassword';
+import { ToastContainer, toast } from "react-toastify";
+import AdminDetails from '../Admin/AdminDetails/AdminDetails';
+import EditAdmin from '../Admin/EditAdmin/EditAdmin';
 const Homepage = () => {
   return (
     <div className="homepageContainer">
@@ -35,6 +38,8 @@ const Homepage = () => {
                 <Route path="changePassword" element={<ChangePassword />}/>
                 <Route path="adminUser" element={<AdminList />}/>
                 <Route path="adminUser/create" element={<CreateAdmin />}/>
+                <Route path="adminUser/view/:email" element={<AdminDetails />}/>
+                <Route path="adminUser/edit/:email" element={<EditAdmin />}/>
                 <Route path="vendor" element={<VendorList/>} />
                 <Route path="vendor/create" element={<CreateVendor/>} />
                 <Route path="customer" element={<CustomerList/>}/>
@@ -46,6 +51,7 @@ const Homepage = () => {
             </div>
           </div>
         </div>
+      <ToastContainer position="top-center" draggable />
     </div>  
   )
 }
