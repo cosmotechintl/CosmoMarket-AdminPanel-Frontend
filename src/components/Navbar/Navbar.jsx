@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import "./Navbar.scss"
 import { IoChevronDownSharp } from "react-icons/io5";
-import { getUsername } from '../../auth';
 import Menu from '../Menu/Menu';
+import { BASE_URL } from '../../utils/config';
+import { adminRequest, updateAuthToken } from '../../utils/requestMethods';
+import useFetch from '../../hooks/useFetch';
 const Navbar = () => {
   const[isMenuOpen,setIsMenuOpen] = useState(false);
   const menuRef = useRef();
@@ -20,7 +22,8 @@ const Navbar = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-  const username = getUsername();
+  const { data } = useFetch(`${BASE_URL}/adminUser/get/detail`, adminRequest);
+  updateAuthToken();
   return (
     <div className='navbarContainer'>
       <div className="logoContainer">
@@ -35,7 +38,9 @@ const Navbar = () => {
       <div className="profileContainer" onClick={toggleMenu} ref={menuRef}>
         <div className="profile">
           <img src="https://www.w3schools.com/howto/img_avatar.png" alt="profile" className='profileImg' />
-          <span className='profileName'>Namaste, {username}</span>
+          <span className='profileName'>
+            Namaste, {data && data.data ? data.data.username : ''}
+          </span>
           <span className="chevron"><IoChevronDownSharp/></span>
         </div>
         { isMenuOpen && <Menu/> }

@@ -33,9 +33,9 @@ const ChangePassword = () => {
     };
     updateAuthToken();
     const fields = [
-        { name: 'oldPassword', type: 'password', value: formData.oldPassword, onChange: handleChange },
-        { name: 'newPassword', type: 'password', value: formData.newPassword, onChange: handleChange },
-        { name: 'retypeNewPassword', type: 'password', value: formData.retypeNewPassword, onChange: handleChange },
+        { name: 'oldPassword', label:"Old Password", type: 'password', value: formData.oldPassword, onChange: handleChange },
+        { name: 'newPassword', label:"New Password", type: 'password', value: formData.newPassword, onChange: handleChange },
+        { name: 'retypeNewPassword', label:"Confirm Password", type: 'password', value: formData.retypeNewPassword, onChange: handleChange },
     ];
     return (
         <div className="changePasswordContainer">
@@ -46,7 +46,7 @@ const ChangePassword = () => {
                 createButtonLabel='Change Password'
                 onSubmit={handleSubmit}
             />
-            <ToastContainer position="top-center" draggable />
+        <ToastContainer position="top-center" draggable />
         </div>
     );
 };

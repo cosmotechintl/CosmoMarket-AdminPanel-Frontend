@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import "./List.scss";
-import { FaEye, FaEyeSlash, FaFilter } from "react-icons/fa";
-import { IoIosAddCircle } from "react-icons/io";
-import { IoIosMore } from "react-icons/io";
+import { FaEyeSlash, FaFilter } from "react-icons/fa";
+import { IoIosAddCircle, IoIosMore } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeftLong } from "react-icons/fa6";
+import OptionsMenu from '../../components/OptionsMenu/OptionsMenu';
+
 const List = ({
   title = "Default Title", 
   link = "/", 
@@ -12,16 +13,38 @@ const List = ({
   headers = [], 
   rows = [],
   showEyeViewIcon = true,
-  showFilterIcon = true 
+  showFilterIcon = true,
+  getMenuItems 
 }) => {
   const navigate = useNavigate();
+  const [visibleMenu, setVisibleMenu] = useState(null);
+  const menuRef = useRef(null);
 
   const handleCreateButtonClick = () => {
     navigate(link);
   };
+
   const handleBackClick = () => {
     navigate(-1);
   };
+
+  const handleMoreClick = (rowIndex) => {
+    setVisibleMenu(visibleMenu === rowIndex ? null : rowIndex);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setVisibleMenu(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className='viewPageContainer'>
       <div className="viewPageContents">
@@ -52,7 +75,15 @@ const List = ({
             <tbody>
               {rows.map((row, rowIndex) => (
                 <tr key={rowIndex}>
-                  <td><IoIosMore /></td>
+                  <td style={{ position: 'relative' }} ref={menuRef}> 
+                    <IoIosMore onClick={() => handleMoreClick(rowIndex)} />
+                    {visibleMenu === rowIndex && (
+                      <OptionsMenu
+                        menuItems={getMenuItems(row)}
+                        visible={true}
+                      />
+                    )}
+                  </td>
                   {row.map((cell, cellIndex) => (
                     <td key={cellIndex}>{cell}</td>
                   ))}

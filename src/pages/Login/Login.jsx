@@ -87,7 +87,7 @@ const Login = () => {
                                 type="submit" 
                                 className='submitButton' 
                                 onClick={handleFormSubmit}
-                                disabled={!isFormValid}
+                                disabled={!isFormValid}               
                             >
                                 Login
                             </button>
