@@ -17,6 +17,7 @@ import ChangePassword from '../ChangePassword/ChangePassword';
 import { ToastContainer, toast } from "react-toastify";
 import AdminDetails from '../Admin/AdminDetails/AdminDetails';
 import EditAdmin from '../Admin/EditAdmin/EditAdmin';
+import AccessGroupDetails from '../AccessGroup/AccessGroupDetails/AccessGroupDetails';
 const Homepage = () => {
   return (
     <div className="homepageContainer">
@@ -47,6 +48,7 @@ const Homepage = () => {
                 <Route path="setting" element={<SettingPage />}/>
                 <Route path="setting/group" element={<AccessGroupPage />}/>
                 <Route path="setting/group/create" element={<CreateAccessGroup />}/>
+                <Route path="setting/group/view/:name" element={<AccessGroupDetails />}/>
               </Routes>
             </div>
           </div>

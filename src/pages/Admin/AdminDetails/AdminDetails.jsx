@@ -29,7 +29,7 @@ const AdminDetails = () => {
         const fetchData = async () => {
           try {
             const response = await adminRequest.post(`${BASE_URL}/adminUser/get`, {
-              "username": `${activeURL}`
+              "email": `${activeURL}`
             });
             setData(response.data);
           } catch (error) {
