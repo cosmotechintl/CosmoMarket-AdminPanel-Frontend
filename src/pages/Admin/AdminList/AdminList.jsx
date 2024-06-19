@@ -5,6 +5,7 @@ import { toast, Toaster } from "react-hot-toast";
 import { BASE_URL } from '../../../utils/config';
 import { adminRequest, updateAuthToken } from '../../../utils/requestMethods';
 import Loader from "../../../components/Loader/Loader"
+
 const AdminList = () => {
   const headers = ["Name", "Email", "Mobile No", "Access Group", "Status"];
   const [rows, setRows] = useState([]);
@@ -35,14 +36,14 @@ const AdminList = () => {
 
   const getMenuItems = (row) => [
     { link: `view/${row[1]}`, text: 'View' },
-    { link: `/delete/${row[1]}`, text: 'Delete' },
-    { link: `/delete/${row[1]}`, text: 'Block' },
-    { link: `/delete/${row[1]}`, text: 'Reset Password' }
+    { link: `delete/${row[1]}`, text: 'Delete' },
+    { link: `block/${row[1]}`, text: 'Block' },
+    { link: `reset-password/${row[1]}`, text: 'Reset Password' }
   ];
 
   return (
     <div className="adminListContainer">
-      { rows ? 
+      { rows.length > 0 ? 
         <List
           title="Admin Users"
           createButtonLabel='Create Admin'

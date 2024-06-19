@@ -18,7 +18,7 @@ const List = ({
 }) => {
   const navigate = useNavigate();
   const [visibleMenu, setVisibleMenu] = useState(null);
-  const menuRef = useRef(null);
+  const menuRefs = useRef([]);
 
   const handleCreateButtonClick = () => {
     navigate(link);
@@ -34,7 +34,7 @@ const List = ({
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+      if (menuRefs.current.every(ref => ref && !ref.contains(event.target))) {
         setVisibleMenu(null);
       }
     };
@@ -75,7 +75,7 @@ const List = ({
             <tbody>
               {rows.map((row, rowIndex) => (
                 <tr key={rowIndex}>
-                  <td style={{ position: 'relative' }} ref={menuRef}> 
+                  <td style={{ position: 'relative' }} ref={el => menuRefs.current[rowIndex] = el}> 
                     <IoIosMore onClick={() => handleMoreClick(rowIndex)} />
                     {visibleMenu === rowIndex && (
                       <OptionsMenu

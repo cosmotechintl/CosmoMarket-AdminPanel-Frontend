@@ -9,6 +9,7 @@ const CustomForm = ({
   flexDirection = 'column',
   createButtonLabel = 'Create',
   onSubmit,
+  isSubmitting = false
 }) => {
   const navigate = useNavigate();
   const handleBackClick = () => {
@@ -64,10 +65,10 @@ const CustomForm = ({
               </div>
             ))}
             <div className="btn-group">
-              <button type="submit" className="create-btn">
+              <button type="submit" className="create-btn" disabled={isSubmitting}>
                 {createButtonLabel}
               </button>
-              <button type="button" className="cancel-btn" onClick={handleBackClick}>
+              <button type="button" className="cancel-btn" disabled={isSubmitting} onClick={handleBackClick}>
                 Cancel
               </button>
             </div>

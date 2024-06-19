@@ -4,7 +4,8 @@ import "./EditAdmin.scss";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { adminRequest, updateAuthToken } from '../../../utils/requestMethods';
 import { BASE_URL } from '../../../utils/config';
-import toast, { Toaster } from 'react-hot-toast';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Loader from '../../../components/Loader/Loader';
 
 const EditAdmin = () => {
@@ -24,7 +25,7 @@ const EditAdmin = () => {
         const fetchData = async () => {
           try {
             const response = await adminRequest.post(`${BASE_URL}/adminUser/get`, {
-              "username": `${activeURL}`
+              "email": `${activeURL}`
             });
             setData(response.data);
             setFormData({
@@ -58,18 +59,26 @@ const EditAdmin = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await adminRequest.post(`${BASE_URL}/adminUser/edit`, {
-                email: activeURL,
-                name: formData.fullName,
-                mobileNumber: formData.mobileNumber,
-                address: formData.address,
-                email: formData.email,
-                accessGroup: {
-                  name:'DEMO'
+            const response = await toast.promise(
+                adminRequest.post(`${BASE_URL}/adminUser/update`, {
+                    email: activeURL,
+                    name: formData.fullName,
+                    mobileNumber: formData.mobileNumber,
+                    address: formData.address,
+                    email: formData.email,
+                    accessGroup: {
+                    name:'Super Admin'
                 }
+            }),
+            {
+                'pending':'Your request is being processed'
             });
-            toast.success(response.data.message);
-            
+            if (response.data.code == 0) {
+                toast.success(response.data.message);
+            } 
+            else{
+                toast.error(response.data.message);
+            }
         } catch (error) {
             toast.error(error.message || "Failed to update data");
         }
@@ -90,8 +99,8 @@ const EditAdmin = () => {
                 createButtonLabel='Update Data'
                 flexDirection='row'
                 onSubmit={handleSubmit}
-            />
-            <Toaster />
+            />    
+            <ToastContainer position='top-center' />
         </div>
     );
 };

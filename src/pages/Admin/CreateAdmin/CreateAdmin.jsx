@@ -3,17 +3,21 @@ import "./CreateAdmin.scss";
 import CustomForm from '../../../components/CustomForm/CustomForm';
 import { adminRequest, updateAuthToken } from '../../../utils/requestMethods';
 import { BASE_URL } from '../../../utils/config';
-import { toast, Toaster } from "react-hot-toast";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CreateAdmin = () => {
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     fullName: '',
     mobileNumber: '',
     address: '',
     email: '',
     accessGroup: '',
-  });
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
   const [accessGroups, setAccessGroups] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchAccessGroups = async () => {
@@ -37,24 +41,34 @@ const CreateAdmin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    setIsSubmitting(true);
+    
     try {
-      const response = await adminRequest.post(`${BASE_URL}/adminUser/create`, {
-        name: formData.fullName,
-        mobileNumber: formData.mobileNumber,
-        address: formData.address,
-        email: formData.email,
-        accessGroup: {
-          name: formData.accessGroup
+      const response = await toast.promise(
+        adminRequest.post(`${BASE_URL}/adminUser/create`, {
+          name: formData.fullName,
+          mobileNumber: formData.mobileNumber,
+          address: formData.address,
+          email: formData.email,
+          accessGroup: {
+            name: formData.accessGroup
+          }
+        }),
+        {
+          pending: 'Processing your request',
         }
-      });
+      );
       if (response.data.code == 0) {
         toast.success(response.data.message);
-      } else {
+      } 
+      if (response.data.code != 0) {
         toast.error(response.data.message);
-      }
+      } 
+      setFormData(initialFormData);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message || "Failed to create user");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -81,8 +95,9 @@ const CreateAdmin = () => {
         flexDirection="row"
         createButtonLabel='Create User'
         onSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
       />
-      <Toaster />
+      <ToastContainer position='top-center' />
     </div>
   );
 }
