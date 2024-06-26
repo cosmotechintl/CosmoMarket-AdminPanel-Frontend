@@ -4,7 +4,10 @@ import "./ChangePassword.scss";
 import { adminRequest, updateAuthToken } from "../../utils/requestMethods";
 import { BASE_URL } from '../../utils/config';
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"
+import { useNavigate } from 'react-router-dom';
 const ChangePassword = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         oldPassword: '',
         newPassword: '',
@@ -16,13 +19,21 @@ const ChangePassword = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await adminRequest.post(`${BASE_URL}/adminUser/change-password`, {
+            const response = await toast.promise(
+                adminRequest.post(`${BASE_URL}/adminUser/change-password`, {
                 oldPassword: formData.oldPassword,
                 newPassword: formData.newPassword,
                 retypeNewPassword: formData.retypeNewPassword
-            });
+            }),
+            {
+                pending: 'Processing your request',
+            }
+            );
            if(response.data.code==0){
-            toast.success(response.data.message);
+            toast.success(response.data.message,{
+                autoClose: 500,
+                onClose:()=>navigate("/")
+            });
            }
            else{
             toast.error(response.data.message);
@@ -46,7 +57,7 @@ const ChangePassword = () => {
                 createButtonLabel='Change Password'
                 onSubmit={handleSubmit}
             />
-        <ToastContainer position="top-center" draggable />
+        <ToastContainer position="top-center"  draggable />
         </div>
     );
 };

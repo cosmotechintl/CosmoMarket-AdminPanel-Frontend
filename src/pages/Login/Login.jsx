@@ -1,48 +1,64 @@
-import React, { useState } from 'react'
-import "./Login.scss"
-import logo from "../../assets/logo-transparent.png"
-import login from "../../assets/login.png"
-import { MdOutlineEmail, MdOutlinePassword  } from "react-icons/md";
+import React, { useState } from 'react';
+import "./Login.scss";
+import logo from "../../assets/logo-transparent.png";
+import login from "../../assets/login.png";
+import { MdOutlineEmail, MdOutlinePassword } from "react-icons/md";
 import { loginAdmin } from '../../services/loginService';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { performLogin } from '../../auth';
 import { useNavigate } from 'react-router-dom';
+
 const Login = () => {  
     const navigate = useNavigate();
     const [loginDetail, setLoginDetail] = useState({
-        username:'',
-        password:''
+        username: '',
+        password: ''
     });
-    const handleChange = (event,field) => {
+
+    const handleChange = (event, field) => {
         const changedValue = event.target.value;
         setLoginDetail({
             ...loginDetail,
-            [field]:changedValue
+            [field]: changedValue
         });
     }
-    const handleFormSubmit = (event) => {
-        event.preventDefault();
-        //validation
 
-        //submit to server
-        loginAdmin(loginDetail).then((data)=>{
-            if(data.code == 0){
-                performLogin(data,()=>{
-                    toast.success(data.message);
-                    //redirect to dashboard
-                    navigate("/admin/dashboard");
-                })
-            }
-            else{
-                toast.error(data.message);
-            }
-        }).catch(error=>{
-            console.log(error);
-            toast.error(error.message);
-        });
+    const handleFormSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            await toast.promise(
+                loginAdmin(loginDetail),
+                {
+                    pending: 'Logging in...',
+                    success: {
+                        render({ data }) {
+                            if (data.code == 0) {
+                                performLogin(data, () => {
+                                    // Redirect to dashboard
+                                    navigate('/admin/dashboard');
+                                });
+                                return data.message;
+                            } else {
+                                throw new Error(data.message);
+                            }
+                        },
+                    },
+                    error: {
+                        render({ data }) {
+                            return data.message || 'An error occurred';
+                        },
+                    },
+                }
+            );
+        } catch (error) {
+            console.error(error);
+            toast.error(error.message || 'An unexpected error occurred');
+        }
     }
+
     const isFormValid = loginDetail.username && loginDetail.password;
+
     return (
         <div className='loginContainer'>
             <div className="loginContents">
@@ -67,7 +83,7 @@ const Login = () => {
                                 placeholder='Enter your username' 
                                 className='emailField' 
                                 value={loginDetail.username} 
-                                onChange={(e)=>handleChange(e,'username')}
+                                onChange={(e) => handleChange(e, 'username')}
                             />
                         </div>
                         <div className="inputField">
@@ -79,7 +95,7 @@ const Login = () => {
                                 placeholder='Enter your password' 
                                 className='passwordField' 
                                 value={loginDetail.password} 
-                                onChange={(e)=>handleChange(e,'password')}
+                                onChange={(e) => handleChange(e, 'password')}
                             />
                         </div>
                         <div className="loginButton">
@@ -95,9 +111,9 @@ const Login = () => {
                     </div>
                 </div>
             </div>
-            <ToastContainer position="top-right" reverseOrder={true}/>
+            <ToastContainer position="top-center" reverseOrder={true}/>
         </div>
-    )
+    );
 }
 
-export default Login
+export default Login;
