@@ -3,7 +3,8 @@ import "./AccessGroupList.scss"
 import List from '../../../components/List/List'
 import { adminRequest, updateAuthToken } from '../../../utils/requestMethods';
 import { BASE_URL } from '../../../utils/config';
-import toast, { Toaster } from 'react-hot-toast';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"
 import Loader from "../../../components/Loader/Loader"
 
 const AccessGroupList = () => {
@@ -31,7 +32,7 @@ const AccessGroupList = () => {
   updateAuthToken();
 
   const getMenuItems = (row) => [
-    { link: `/edit/${row[1]}`, text: 'View' },
+    { link: `view/${row[0]}`, text: 'View' },
     { link: `/delete/${row[1]}`, text: 'Edit' },
     { link: `/delete/${row[1]}`, text: 'Delete' },
   ];
@@ -53,7 +54,7 @@ const AccessGroupList = () => {
         : <Loader/>
         }
       </div>
-      <Toaster />
+      <ToastContainer position='top-center' />
     </div>
   )
 }

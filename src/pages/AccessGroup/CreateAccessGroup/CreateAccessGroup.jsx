@@ -39,14 +39,16 @@ const CreateAccessGroup = () => {
             name: type.toUpperCase()
           },
           roles: selectedRoles.map(roleId => ({ roleId }))
-      }),
-      {
-        pending: 'Processing your request',
-        success: 'Access group created successfully.',
-        error: 'Failed to create access group.'
-      }
+        }),
+        {
+          pending: 'Processing your request',
+
+        }
       );
-      if (response.data.code != 0) {
+      if (response.data.code == 0) {
+        toast.success(response.data.message);
+      }
+      else{
         toast.error(response.data.message);
       }
     } catch (error) {
