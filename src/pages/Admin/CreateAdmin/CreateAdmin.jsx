@@ -51,7 +51,7 @@ const CreateAdmin = () => {
           address: formData.address,
           email: formData.email,
           accessGroup: {
-            name: formData.accessGroup,
+            name: "formData.accessGroup",
           },
         }),
         {

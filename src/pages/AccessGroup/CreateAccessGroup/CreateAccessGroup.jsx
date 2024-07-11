@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import "./CreateAccessGroup.scss";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import useFetch from "../../../hooks/useFetch";
-import { BASE_URL } from '../../../utils/config';
-import { adminRequest, updateAuthToken } from '../../../utils/requestMethods';
+import { BASE_URL } from "../../../utils/config";
+import { adminRequest, updateAuthToken } from "../../../utils/requestMethods";
 import Loader from "../../../components/Loader/Loader";
 import NotFound from "../../../components/NotFound/NotFound";
 import { ToastContainer, toast } from "react-toastify";
@@ -18,9 +18,9 @@ const CreateAccessGroup = () => {
   const { data, error, loading } = useFetch(`${BASE_URL}/roles`, adminRequest);
   console.log(data);
   updateAuthToken();
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [type, setType] = useState('');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [type, setType] = useState("");
   const [selectedRoles, setSelectedRoles] = useState([]);
 
   useEffect(() => {
@@ -36,19 +36,17 @@ const CreateAccessGroup = () => {
           name,
           description,
           type: {
-            name: type.toUpperCase()
+            name: type.toUpperCase(),
           },
-          roles: selectedRoles.map(roleId => ({ roleId }))
+          roles: selectedRoles.map((roleId) => ({ roleId })),
         }),
         {
-          pending: 'Processing your request',
-
+          pending: "Processing your request",
         }
       );
       if (response.data.code == 0) {
         toast.success(response.data.message);
-      }
-      else{
+      } else {
         toast.error(response.data.message);
       }
     } catch (error) {
@@ -74,13 +72,15 @@ const CreateAccessGroup = () => {
         }
       }
 
-      updatedSelectedRoles = selectedRoles.filter(id => !rolesToDeselect.has(id));
+      updatedSelectedRoles = selectedRoles.filter(
+        (id) => !rolesToDeselect.has(id)
+      );
     } else {
       // Select the role and all its child roles recursively
       updatedSelectedRoles = [...selectedRoles, roleId];
 
       const addAllChildRoles = (roles) => {
-        roles.forEach(role => {
+        roles.forEach((role) => {
           updatedSelectedRoles.push(role.id);
           if (role.childRoles && role.childRoles.length > 0) {
             addAllChildRoles(role.childRoles);
@@ -110,7 +110,9 @@ const CreateAccessGroup = () => {
             type="checkbox"
             id={role.id}
             checked={selectedRoles.includes(role.id)}
-            onChange={() => handleRoleChange(role.id, parentId, role.childRoles || [])}
+            onChange={() =>
+              handleRoleChange(role.id, parentId, role.childRoles || [])
+            }
           />
           <label htmlFor={role.id}>{role.name}</label>
         </div>
@@ -124,13 +126,15 @@ const CreateAccessGroup = () => {
   };
 
   const renderChildRoles = (childRoles, parentId) => {
-    return childRoles.map(childRole => (
+    return childRoles.map((childRole) => (
       <div key={childRole.id} className="childRoleInner">
         <input
           type="checkbox"
           id={childRole.id}
           checked={selectedRoles.includes(childRole.id)}
-          onChange={() => handleRoleChange(childRole.id, parentId, childRole.childRoles || [])}
+          onChange={() =>
+            handleRoleChange(childRole.id, parentId, childRole.childRoles || [])
+          }
         />
         <label htmlFor={childRole.id}>{childRole.name}</label>
         {childRole.childRoles && childRole.childRoles.length > 0 && (
@@ -146,7 +150,9 @@ const CreateAccessGroup = () => {
     <div className="createAccessGroupContainer">
       <div className="createAccessGroupContents">
         <div className="accessGroupTop">
-          <span className="accessGroupBackIcon" onClick={handleBackClick}><FaArrowLeftLong /></span>
+          <span className="accessGroupBackIcon" onClick={handleBackClick}>
+            <FaArrowLeftLong />
+          </span>
           <span className="accessGroupHeaderTitle">Create Access Group</span>
         </div>
         <div className="accessGroupBottom">
@@ -155,11 +161,11 @@ const CreateAccessGroup = () => {
           {data && data.data && (
             <form onSubmit={handleSubmit}>
               <div className="inputGroup">
-                <label htmlFor='name'>Name</label>
+                <label htmlFor="name">Name</label>
                 <input
-                  type='text'
-                  name='name'
-                  id='name'
+                  type="text"
+                  name="name"
+                  id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -181,25 +187,31 @@ const CreateAccessGroup = () => {
                   value={type}
                   onChange={(e) => setType(e.target.value)}
                 >
-                  <option value="" disabled>Select type</option>
+                  <option value="" disabled>
+                    Select type
+                  </option>
                   <option value="admin">Admin</option>
                   <option value="vendor">Vendor</option>
                 </select>
               </div>
-              {type === 'admin' && (
-                <div className="rolesContainer">
-                  {renderRoles(data.data)}
-                </div>
-              )}
+              <div className="rolesContainer">{renderRoles(data.data)}</div>
               <div className="btn-group">
-                <button type="submit" className='create-btn'>Create Access Group</button>
-                <button type="button" className="cancel-btn" onClick={handleBackClick}>Cancel</button>
+                <button type="submit" className="create-btn">
+                  Create Access Group
+                </button>
+                <button
+                  type="button"
+                  className="cancel-btn"
+                  onClick={handleBackClick}
+                >
+                  Cancel
+                </button>
               </div>
             </form>
           )}
         </div>
       </div>
-      <ToastContainer position='top-center' />
+      <ToastContainer position="top-center" />
     </div>
   );
 };

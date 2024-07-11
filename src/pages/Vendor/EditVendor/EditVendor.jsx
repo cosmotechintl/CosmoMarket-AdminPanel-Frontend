@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
-import "./CreateVendor.scss";
 import CustomForm from "../../../components/CustomForm/CustomForm";
+import "./EditVendor.scss";
+import { useLocation, useNavigate } from "react-router-dom";
 import { adminRequest, updateAuthToken } from "../../../utils/requestMethods";
+import { BASE_URL } from "../../../utils/config";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BASE_URL } from "../../../utils/config";
-const CreateVendor = () => {
+import Loader from "../../../components/Loader/Loader";
+import Swal from "sweetalert2";
+const EditVendor = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const activeURL = location.pathname.split("/")[4];
   const initialFormData = {
     vendorName: "",
     vendorCategory: "",
@@ -19,13 +25,34 @@ const CreateVendor = () => {
     companyLogo: "",
     accessGroup: "",
   };
-
   const [formData, setFormData] = useState(initialFormData);
   const [accessGroups, setAccessGroups] = useState([]);
   const [vendorCategories, setVendorCategories] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await adminRequest.post(
+          `${BASE_URL}/vendor/get/detail`,
+          {
+            code: `${activeURL}`,
+          }
+        );
+        setFormData({
+          vendorName: response.data.data.name,
+          phoneNumber: response.data.data.phoneNumber,
+          address: response.data.data.address,
+          email: response.data.data.email,
+          vendorUserName: response.data.data.vendorUsers[0].name,
+          vendorUserEmail: response.data.data.vendorUsers[0].email,
+          vendorUserPhone: response.data.data.vendorUsers[0].mobileNumber,
+          accessGroup: "Futsal Admin",
+        });
+        console.log(response.data);
+      } catch (error) {
+        toast.error(error.message || "Failed to fetch data");
+      }
+    };
     const fetchAccessGroups = async () => {
       try {
         const response = await adminRequest.post(`${BASE_URL}/accessGroup`, {
@@ -38,9 +65,6 @@ const CreateVendor = () => {
         toast.error(error.message || "Failed to fetch access groups");
       }
     };
-    fetchAccessGroups();
-  }, []);
-  useEffect(() => {
     const fetchVendorCategories = async () => {
       try {
         const response = await adminRequest.post(
@@ -56,57 +80,18 @@ const CreateVendor = () => {
         toast.error(error.message || "Failed to fetch access groups");
       }
     };
+    fetchData();
+    fetchAccessGroups();
     fetchVendorCategories();
-  }, []);
+  }, [activeURL]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      const response = await toast.promise(
-        adminRequest.post(`${BASE_URL}/vendor/create`, {
-          name: formData.vendorName,
-          category: {
-            name: formData.vendorCategory,
-          },
-          logo: "vendorlogo.png",
-          address: formData.address,
-          email: formData.email,
-          phoneNumber: formData.phoneNumber,
-          panNumber: formData.panNumber,
-          vendorUser: {
-            name: formData.vendorUserName,
-            mobileNumber: formData.vendorUserPhone,
-            email: formData.vendorUserEmail,
-            accessGroup: {
-              name: "Futsal Admin",
-            },
-          },
-        }),
-        {
-          pending: "Processing your request",
-        }
-      );
-      console.log(response);
-      if (response.data.code == 0) {
-        toast.success(response.data.message);
-      }
-      if (response.data.code != 0) {
-        toast.error(response.data.message);
-      }
-      setFormData(initialFormData);
-    } catch (error) {
-      toast.error(error.message || "Failed to create user");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   const fields = [
     {
       name: "vendorName",
@@ -151,13 +136,6 @@ const CreateVendor = () => {
       onChange: handleChange,
     },
     {
-      name: "panNumber",
-      label: "Pan Number",
-      type: "text",
-      value: formData.panNumber,
-      onChange: handleChange,
-    },
-    {
       name: "vendorUserName",
       label: "System User Name",
       type: "text",
@@ -195,13 +173,16 @@ const CreateVendor = () => {
     },
     { name: "companyLogo", label: "Company Logo", type: "file" },
   ];
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  };
   return (
-    <div className="createVendorContainer">
+    <div className="editVendorContainer">
       <CustomForm
-        header="Create Vendor"
+        header="Edit Vendor"
         fields={fields}
         flexDirection="row"
-        createButtonLabel="Create Vendor"
+        createButtonLabel="Update"
         onSubmit={handleSubmit}
       />
       <ToastContainer position="top-center" />
@@ -209,4 +190,4 @@ const CreateVendor = () => {
   );
 };
 
-export default CreateVendor;
+export default EditVendor;

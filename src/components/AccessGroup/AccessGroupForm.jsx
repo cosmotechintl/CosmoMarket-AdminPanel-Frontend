@@ -1,44 +1,53 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import "./CustomForm.scss";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { IoMdArrowDropright, IoMdArrowDropdown } from "react-icons/io";
 
 const roles = {
   group1: {
-    Vendor: ['create vendor', 'update vendor', 'view vendor'],
-    Customer: ['create customer', 'view customer', 'block customer'],
-    Supplier: ['create supplier', 'update supplier', 'view supplier'],
-    Client: ['create client', 'view client', 'block client'],
-    Admin: ['create admin', 'update admin', 'view admin'],
-    User: ['create user', 'view user', 'block user']
+    Vendor: ["create vendor", "update vendor", "view vendor"],
+    Customer: ["create customer", "view customer", "block customer"],
+    Supplier: ["create supplier", "update supplier", "view supplier"],
+    Client: ["create client", "view client", "block client"],
+    Admin: ["create admin", "update admin", "view admin"],
+    User: ["create user", "view user", "block user"],
   },
   group2: {
-    Supplier: ['create supplier', 'update supplier', 'view supplier'],
-    Client: ['create client', 'view client', 'block client']
+    Supplier: ["create supplier", "update supplier", "view supplier"],
+    Client: ["create client", "view client", "block client"],
   },
   group3: {
-    Admin: ['create admin', 'update admin', 'view admin'],
-    User: ['create user', 'view user', 'block user']
-  }
+    Admin: ["create admin", "update admin", "view admin"],
+    User: ["create user", "view user", "block user"],
+  },
 };
 
-const CustomForm = ({ header = "Default Header", fields = [], flexDirection = "column", createButtonLabel = "Create", onSubmit }) => {
+const CustomForm = ({
+  header = "Default Header",
+  fields = [],
+  flexDirection = "column",
+  createButtonLabel = "Create",
+  onSubmit,
+}) => {
   const navigate = useNavigate();
   const handleBackClick = () => {
     navigate(-1);
   };
 
-  const [selectedGroup, setSelectedGroup] = useState('');
+  const [selectedGroup, setSelectedGroup] = useState("");
   const [selectedRoles, setSelectedRoles] = useState({});
   const [expandedRoles, setExpandedRoles] = useState({});
 
   useEffect(() => {
     if (selectedGroup) {
-      const initialExpandedRoles = Object.keys(roles[selectedGroup]).reduce((acc, role) => {
-        acc[role] = true;
-        return acc;
-      }, {});
+      const initialExpandedRoles = Object.keys(roles[selectedGroup]).reduce(
+        (acc, role) => {
+          acc[role] = true;
+          return acc;
+        },
+        {}
+      );
       setExpandedRoles(initialExpandedRoles);
     }
   }, [selectedGroup]);
@@ -63,7 +72,7 @@ const CustomForm = ({ header = "Default Header", fields = [], flexDirection = "c
   const handleChildRoleChange = (parent, child) => {
     const updatedRoles = { ...selectedRoles };
     if (updatedRoles[parent]?.includes(child)) {
-      updatedRoles[parent] = updatedRoles[parent].filter(r => r !== child);
+      updatedRoles[parent] = updatedRoles[parent].filter((r) => r !== child);
       if (updatedRoles[parent].length === 0) {
         delete updatedRoles[parent];
       }
@@ -88,7 +97,9 @@ const CustomForm = ({ header = "Default Header", fields = [], flexDirection = "c
     <div className="createPageContainer">
       <div className="createPageContents">
         <div className="top">
-          <span className="backIcon" onClick={handleBackClick}><FaArrowLeftLong /></span>
+          <span className="backIcon" onClick={handleBackClick}>
+            <FaArrowLeftLong />
+          </span>
           <span className="headerTitle">{header}</span>
         </div>
         <div className="bottom">
@@ -96,17 +107,35 @@ const CustomForm = ({ header = "Default Header", fields = [], flexDirection = "c
             {fields.map((field, index) => (
               <div className="inputGroup" key={index}>
                 <label htmlFor={field.name}>{field.name}</label>
-                {field.type === 'select' ? (
-                  <select name={field.name} id={field.name} onChange={handleSelectChange} value={field.value}>
+                {field.type === "select" ? (
+                  <select
+                    name={field.name}
+                    id={field.name}
+                    onChange={handleSelectChange}
+                    value={field.value}
+                  >
                     <option value="">Select an option</option>
                     {field.options.map((option, index) => (
-                      <option value={option.value} key={index}>{option.label}</option>
+                      <option value={option.value} key={index}>
+                        {option.label}
+                      </option>
                     ))}
                   </select>
-                ) : field.type === 'textarea' ? (
-                  <textarea name={field.name} id={field.name} value={field.value} onChange={field.onChange} />
+                ) : field.type === "textarea" ? (
+                  <textarea
+                    name={field.name}
+                    id={field.name}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
                 ) : (
-                  <input type={field.type} name={field.name} id={field.name} value={field.value} onChange={field.onChange} />
+                  <input
+                    type={field.type}
+                    name={field.name}
+                    id={field.name}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
                 )}
               </div>
             ))}
@@ -116,14 +145,24 @@ const CustomForm = ({ header = "Default Header", fields = [], flexDirection = "c
                   <div key={parentRole} className="roleGroup">
                     <div className="parentRole">
                       {expandedRoles[parentRole] ? (
-                        <IoMdArrowDropdown className="iconDrop" onClick={() => toggleExpand(parentRole)} />
+                        <IoMdArrowDropdown
+                          className="iconDrop"
+                          onClick={() => toggleExpand(parentRole)}
+                        />
                       ) : (
-                        <IoMdArrowDropright className="iconDrop" onClick={() => toggleExpand(parentRole)} />
+                        <IoMdArrowDropright
+                          className="iconDrop"
+                          onClick={() => toggleExpand(parentRole)}
+                        />
                       )}
-                      <input className="parentRole__checkbox"
+                      <input
+                        className="parentRole__checkbox"
                         type="checkbox"
                         id={parentRole}
-                        checked={selectedRoles[parentRole]?.length === roles[selectedGroup][parentRole].length}
+                        checked={
+                          selectedRoles[parentRole]?.length ===
+                          roles[selectedGroup][parentRole].length
+                        }
                         onChange={() => handleParentRoleChange(parentRole)}
                       />
                       <label htmlFor={parentRole}>{parentRole}</label>
@@ -136,7 +175,9 @@ const CustomForm = ({ header = "Default Header", fields = [], flexDirection = "c
                               type="checkbox"
                               id={childRole}
                               checked={isChecked(parentRole, childRole)}
-                              onChange={() => handleChildRoleChange(parentRole, childRole)}
+                              onChange={() =>
+                                handleChildRoleChange(parentRole, childRole)
+                              }
                             />
                             <label htmlFor={childRole}>{childRole}</label>
                           </div>
@@ -148,8 +189,16 @@ const CustomForm = ({ header = "Default Header", fields = [], flexDirection = "c
               </div>
             )}
             <div className="btn-group">
-              <button type="submit" className='create-btn'>{createButtonLabel}</button>
-              <button type="button" className="cancel-btn" onClick={handleBackClick}>Cancel</button>
+              <button type="submit" className="create-btn">
+                {createButtonLabel}
+              </button>
+              <button
+                type="button"
+                className="cancel-btn"
+                onClick={handleBackClick}
+              >
+                Cancel
+              </button>
             </div>
           </form>
         </div>

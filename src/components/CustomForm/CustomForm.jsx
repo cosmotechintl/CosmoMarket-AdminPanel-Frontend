@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import './CustomForm.scss';
-import { FaArrowLeftLong } from 'react-icons/fa6';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import "./CustomForm.scss";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 const CustomForm = ({
-  header = 'Default Header',
+  header = "Default Header",
   fields = [],
-  flexDirection = 'column',
-  createButtonLabel = 'Create',
+  flexDirection = "column",
+  createButtonLabel = "Create",
   onSubmit,
-  isSubmitting = false
+  isSubmitting = false,
 }) => {
   const navigate = useNavigate();
   const handleBackClick = () => {
@@ -38,36 +38,77 @@ const CustomForm = ({
           <span className="headerTitle">{header}</span>
         </div>
         <div className="bottom">
-          <form style={{ flexDirection: flexDirection }} onSubmit={onSubmit} encType='multipart/form-data'>
+          <form
+            style={{ flexDirection: flexDirection }}
+            onSubmit={onSubmit}
+            encType="multipart/form-data"
+          >
             {fields.map((field, index) => (
               <div className="inputGroup" key={index}>
                 <label htmlFor={field.name}>{field.label}</label>
-                {field.type === 'select' ? (
-                  <select name={field.name} id={field.name} value={field.value} onChange={field.onChange}>
+                {field.type === "select" ? (
+                  <select
+                    name={field.name}
+                    id={field.name}
+                    value={field.value}
+                    onChange={field.onChange}
+                  >
                     {field.options.map((option, index) => (
                       <option value={option.value} key={index}>
                         {option.label}
                       </option>
                     ))}
                   </select>
-                ) : field.type === 'textarea' ? (
-                  <textarea name={field.name} id={field.name} value={field.value} onChange={field.onChange} />
-                ) : field.type === 'file' ? (
+                ) : field.type === "textarea" ? (
+                  <textarea
+                    name={field.name}
+                    id={field.name}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                ) : field.type === "file" ? (
                   <div className="fileInput">
-                    <input type="file" name={field.name} id={field.name} onChange={handleImageChange} />
-                    {image && <img src={image} alt="Company Logo" className="uploadedImage" />}
+                    <input
+                      type="file"
+                      name={field.name}
+                      id={field.name}
+                      onChange={handleImageChange}
+                    />
+                    {image && (
+                      <img
+                        src={image}
+                        alt="Company Logo"
+                        className="uploadedImage"
+                      />
+                    )}
                   </div>
                 ) : (
-                  <input type={field.type} name={field.name} id={field.name} value={field.value} onChange={field.onChange} disabled={field.isDisabled}  />
+                  <input
+                    type={field.type}
+                    name={field.name}
+                    id={field.name}
+                    value={field.value}
+                    onChange={field.onChange}
+                    disabled={field.isDisabled}
+                  />
                 )}
                 <small className="tailText">{field.tail}</small>
               </div>
             ))}
             <div className="btn-group">
-              <button type="submit" className="create-btn" disabled={isSubmitting}>
+              <button
+                type="submit"
+                className="create-btn"
+                disabled={isSubmitting}
+              >
                 {createButtonLabel}
               </button>
-              <button type="button" className="cancel-btn" disabled={isSubmitting} onClick={handleBackClick}>
+              <button
+                type="button"
+                className="cancel-btn"
+                disabled={isSubmitting}
+                onClick={handleBackClick}
+              >
                 Cancel
               </button>
             </div>
