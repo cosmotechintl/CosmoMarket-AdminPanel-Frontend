@@ -133,35 +133,6 @@ const AdminDetails = () => {
     });
   };
 
-  //   e.preventDefault();
-  //   Swal.fire({
-  //     title: "Are you sure you want to block this user?",
-  //     icon: "question",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#00425A",
-  //     cancelButtonColor: "#FC0000",
-  //     confirmButtonText: "Block",
-  //   }).then(async (result) => {
-  //     if (result.isConfirmed) {
-  //       try {
-  //         const response = await adminRequest.post(
-  //           `${BASE_URL}/adminUser/block`,
-  //           {
-  //             email: `${activeURL}`,
-  //           }
-  //         );
-  //         setRefresh(!refresh);
-  //         Swal.fire({
-  //           title: "Blocked!",
-  //           text: `${response.data.message}`,
-  //           icon: "success",
-  //         });
-  //       } catch (error) {
-  //         toast.error(error.message || "Failed to delete data");
-  //       }
-  //     }
-  //   });
-  // };
   const handleUnblockUser = async (e) => {
     e.preventDefault();
     Swal.fire({

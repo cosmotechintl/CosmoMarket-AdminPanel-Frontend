@@ -1,26 +1,28 @@
 import React, { useEffect, useState } from "react";
-import "./AccessGroupList.scss";
+import "./VendorCategoryList.scss";
 import List from "../../../components/List/List";
 import { adminRequest, updateAuthToken } from "../../../utils/requestMethods";
 import { BASE_URL } from "../../../utils/config";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../../../components/Loader/Loader";
-
-const AccessGroupList = () => {
-  const headers = ["Name", "Type"];
+const VendorCategoryList = () => {
+  const headers = ["Name", "Description"];
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await adminRequest.post(`${BASE_URL}/accessGroup`, {
-          firstRow: 1,
-          pageSize: 3,
-        });
-        const fetchedRows = response.data.data.records.map((accessGroup) => [
-          accessGroup.name,
-          accessGroup.type.name,
+        const response = await adminRequest.post(
+          `${BASE_URL}/vendor/vendorCategory/get`,
+          {
+            firstRow: 1,
+            pageSize: 3,
+          }
+        );
+        const fetchedRows = response.data.data.records.map((vendorCategory) => [
+          vendorCategory.name,
+          vendorCategory.description,
         ]);
         setRows(fetchedRows);
       } catch (error) {
@@ -32,18 +34,18 @@ const AccessGroupList = () => {
   updateAuthToken();
 
   const getMenuItems = (row) => [
-    { link: `view/${row[0]}`, text: "View" },
-    { link: `/delete/${row[1]}`, text: "Edit" },
-    { link: `/delete/${row[1]}`, text: "Delete" },
+    { link: `#`, text: "View" },
+    { link: `#`, text: "Edit" },
+    { link: `#`, text: "Delete" },
   ];
 
   return (
-    <div className="accessGroupContainer">
-      <div className="accessGroupContents">
+    <div className="vendorCategoryContainer">
+      <div className="vendorCategoryContents">
         {rows ? (
           <List
-            title="Access Groups"
-            createButtonLabel="Create Access Group"
+            title="Vendor Category"
+            createButtonLabel="Create Vendor Category"
             headers={headers}
             rows={rows}
             link="create"
@@ -60,4 +62,4 @@ const AccessGroupList = () => {
   );
 };
 
-export default AccessGroupList;
+export default VendorCategoryList;

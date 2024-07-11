@@ -1,11 +1,11 @@
 //colors
-$bg-color: #FFFFFF;
-$primary-color: #00425A;
+$bg-color: #ffffff;
+$primary-color: #00425a;
 $color-dark: #363949;
 $color-small: rgba(128, 128, 128, 0.915);
 $color-dark: #363949;
-$color-icon:#2384b4;
-.navbarContainer{
+$color-icon: #2384b4;
+.navbarContainer {
   position: relative;
   padding: 0px 10px;
   display: flex;
@@ -17,6 +17,9 @@ $color-icon:#2384b4;
   z-index: 5;
   border-bottom: 1px solid rgba(128, 128, 128, 0.378);
   .logoContainer {
+    &:hover {
+      cursor: pointer;
+    }
     display: flex;
     .left {
       .logoImg {
@@ -40,24 +43,24 @@ $color-icon:#2384b4;
       }
     }
   }
-  .profileContainer{
-    &:hover{
+  .profileContainer {
+    &:hover {
       cursor: pointer;
     }
-    .profile{
+    .profile {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 2px;
-      .profileImg{
+      .profileImg {
         height: 25px;
         width: 25px;
         margin-right: 10px;
       }
-      .profileName{
+      .profileName {
         font-size: 12px;
       }
-      .chevron{
+      .chevron {
         padding-top: 3px;
         font-size: 10px;
       }

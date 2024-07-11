@@ -101,11 +101,7 @@ const CreatePassword = () => {
               </div>
             </span>
             <span className="submit-btn">
-              <input
-                type="submit"
-                value="Set Password"
-                className="submitBtn"
-              />
+              <input type="submit" value="Set Password" className="submitBtn" />
             </span>
           </form>
         </div>
