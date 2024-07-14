@@ -135,13 +135,9 @@ const ChangePassword = () => {
           </span>
           <span className="criterias">
             <ul>
-              <li>
-                Password should must contain minimum 1 special character(s).
-              </li>
-              <li>Password should must contain minimum 1 digit(s).</li>
-              <li>
-                Password should must contain minimum 1 lowercase letter(s).
-              </li>
+              <li>Password must contain minimum 1 special character(s).</li>
+              <li>Password must contain minimum 1 digit(s).</li>
+              <li>Password must contain minimum 1 lowercase letter(s).</li>
               <li>Password maximum length is 15.</li>
               <li>Password minimum length is 8.</li>
             </ul>

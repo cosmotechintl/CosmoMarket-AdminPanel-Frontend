@@ -18,7 +18,6 @@ const EditVendor = () => {
     address: "",
     email: "",
     phoneNumber: "",
-    panNumber: "",
     vendorUserName: "",
     vendorUserEmail: "",
     vendorUserPhone: "",
@@ -43,6 +42,8 @@ const EditVendor = () => {
           phoneNumber: response.data.data.phoneNumber,
           address: response.data.data.address,
           email: response.data.data.email,
+          panNumber: response.data.data.panNumber,
+          vendorCategory: response.data.data.vendorCategory.name,
           vendorUserName: response.data.data.vendorUsers[0].name,
           vendorUserEmail: response.data.data.vendorUsers[0].email,
           vendorUserPhone: response.data.data.vendorUsers[0].mobileNumber,
@@ -136,6 +137,14 @@ const EditVendor = () => {
       onChange: handleChange,
     },
     {
+      name: "panNumber",
+      label: "Pan Number",
+      type: "text",
+      value: formData.panNumber,
+      onChange: handleChange,
+      isDisabled: true,
+    },
+    {
       name: "vendorUserName",
       label: "System User Name",
       type: "text",
@@ -148,7 +157,7 @@ const EditVendor = () => {
       type: "email",
       value: formData.vendorUserEmail,
       onChange: handleChange,
-      tail: "Activation link will be sent to this email.",
+      isDisabled: true,
     },
     {
       name: "vendorUserPhone",
@@ -175,6 +184,45 @@ const EditVendor = () => {
   ];
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const response = await toast.promise(
+        adminRequest.post(`${BASE_URL}/vendor/update`, {
+          code: activeURL,
+          name: formData.vendorName,
+          category: {
+            name: formData.vendorCategory,
+          },
+          logo: "https://marketplace.canva.com/EAE1JouRlE8/1/0/1600w/canva-abstract-business-arrow-up-logo-icon.-vector-design-template.-XmQVmJgSSqg.jpg",
+          address: formData.address,
+          email: formData.email,
+          phoneNumber: formData.phoneNumber,
+          vendorUser: {
+            name: formData.vendorUserName,
+            mobileNumber: formData.vendorUserPhone,
+            email: formData.vendorUserEmail,
+            accessGroup: {
+              name: "Futsal Admin",
+            },
+          },
+        }),
+        {
+          pending: "Processing your request",
+        }
+      );
+      console.log(response);
+      if (response.data.code == 0) {
+        toast.success(response.data.message);
+      }
+      if (response.data.code != 0) {
+        toast.error(response.data.message);
+      }
+      setFormData(initialFormData);
+    } catch (error) {
+      toast.error(error.message || "Failed to create user");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   return (
     <div className="editVendorContainer">

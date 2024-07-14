@@ -8,6 +8,7 @@ import Loader from "../../../components/Loader/Loader";
 import { MdGroups2 } from "react-icons/md";
 import { BiCategory } from "react-icons/bi";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { FaRegAddressCard } from "react-icons/fa6";
 import {
   FaEnvelope,
   FaPhoneAlt,
@@ -100,8 +101,8 @@ const VendorDetails = () => {
                       <BiCategory />
                     </span>
                     <span className="categoryName">
-                      {data.data.category
-                        ? data.data.category.name
+                      {data.data.vendorCategory
+                        ? data.data.vendorCategory.name
                         : "Unavailable"}
                     </span>
                   </span>
@@ -114,6 +115,14 @@ const VendorDetails = () => {
                     <FaEnvelope />
                   </span>
                   <span className="email">{maskContent(data.data.email)}</span>
+                </div>
+                <div className="panNumberContainer">
+                  <span className="icon">
+                    <FaRegAddressCard />
+                  </span>
+                  <span className="phone">
+                    {maskContent(data.data.panNumber)}
+                  </span>
                 </div>
                 <div className="phoneContainer">
                   <span className="icon">

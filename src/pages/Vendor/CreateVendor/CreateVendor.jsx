@@ -74,7 +74,7 @@ const CreateVendor = () => {
           category: {
             name: formData.vendorCategory,
           },
-          logo: "vendorlogo.png",
+          logo: "https://marketplace.canva.com/EAE1JouRlE8/1/0/1600w/canva-abstract-business-arrow-up-logo-icon.-vector-design-template.-XmQVmJgSSqg.jpg",
           address: formData.address,
           email: formData.email,
           phoneNumber: formData.phoneNumber,

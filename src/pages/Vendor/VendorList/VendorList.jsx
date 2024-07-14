@@ -39,7 +39,9 @@ const VendorList = () => {
     vendor.name,
     vendor.phoneNumber,
     vendor.address,
-    vendor.category ? vendor.category.name ?? "Unavailable" : "Unavailable",
+    vendor.vendorCategory
+      ? vendor.vendorCategory.name ?? "Unavailable"
+      : "Unavailable",
     vendor.status.name,
   ]);
 

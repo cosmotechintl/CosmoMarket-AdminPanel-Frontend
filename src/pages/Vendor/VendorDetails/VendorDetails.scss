@@ -118,7 +118,8 @@ $color-white: #f1f1f1f1;
         }
         .emailContainer,
         .phoneContainer,
-        .addressContainer {
+        .addressContainer,
+        .panNumberContainer {
           display: inline-flex;
           align-items: center;
           gap: 10px;
